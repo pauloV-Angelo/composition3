@@ -1,6 +1,7 @@
 package entities;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +61,25 @@ public void removeItem(OrderItem item) {
 }
 
 public Double total() {
-	//placeholder implementado em breve
-	return 2.0*5;
+	double sum = 0;
+	for(OrderItem oi: orderItens) {
+		sum += oi.subTotal();
+	}
+	return sum;
+}
+
+public String toString() {
+	StringBuilder sb = new StringBuilder();
+	sb.append("ORDER SUMARY: \n");
+	sb.append("Order moment: "+ moment.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))+ "\n");
+	sb.append("Order Status: " + status.toString() + "\n");
+	sb.append("Client: " + client.getName()+" (" +client.getBirthDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) +") - " + client.getEmail() +"\n" );
+	sb.append("Order items: \n");
+	for(OrderItem orderItem: orderItens) {
+		sb.append(orderItem.getP().getName()+", $"+ String.format("%.2f", orderItem.getP().getPrice()) +", Quantity: "+orderItem.getQuantity()+ ", SubTotal: "+String.format("%.2f", orderItem.subTotal())+"\n");
+	}
+	sb.append("Total price: $"+ String.format("%.2f", total()));
+	return sb.toString();
 }
 
 
